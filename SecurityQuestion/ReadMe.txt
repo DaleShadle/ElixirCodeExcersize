@@ -7,7 +7,7 @@
 
 Design Choices:
 	In-Scope
-		o  Storing of id to the question.  Adding small amount of security by not having the question itself and answer in the same file.  
+		o  Storing of id to the question along with the provided answer.  Adding small amount of security by not having the question itself and answer in the same file.  
 		o  Basic validation
 		o  Persisted file is located in the project folder
 
