@@ -20,7 +20,6 @@ namespace SecurityQuestion
             User _user;  // = new User();
             string _answer = "";
             SecurityQ _secQ = new SecurityQ();
-            DataStore _ds = new DataStore(_file);    //Security File
             #endregion properties
 
             #region Main Process Loop
@@ -37,7 +36,7 @@ namespace SecurityQuestion
                 _user.Name = Console.ReadLine();
 
                 //If user exists offer to allow answering security question.  If no require them to provide answers to questions again.
-                if (_user.Load(_ds))
+                if (_user.Load())
                 {
                     Console.WriteLine("Do you want to answer a secruity question? [y/n]");
                     ConsoleKeyInfo _resp = Console.ReadKey(true);     //If anything by y/Y entered assume no
@@ -46,7 +45,8 @@ namespace SecurityQuestion
                     else
                     {   //User choosing not to answer questions.  Delete them so that they can provide new answers
                         Console.WriteLine("Account removed.  New security answers must be provided.");
-                        _user.Delete(_ds);
+                        _user.Delete();
+                        DataStore _ds = new DataStore(_file);    //Security File
                         _ds.FileCheck();
                         _answerQuestion = false;
                     }
@@ -112,7 +112,7 @@ namespace SecurityQuestion
                         //Persist questions and answers if required number answers provided
                         if (_user.QnACount() == _secQ.ReqQuestions)
                         {
-                            _user.SaveQnA(_ds);
+                            _user.SaveQnA();
                             Console.WriteLine("User " + _user.Name + " persisted.  Press any key to continue.");
                         }
                         else

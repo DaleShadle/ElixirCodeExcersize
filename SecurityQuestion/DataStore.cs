@@ -63,7 +63,6 @@ namespace SecurityQuestion
             catch (Exception e)
             {
                 Console.WriteLine("General Error: {0}", e.Message);
-
             }
         }
 
