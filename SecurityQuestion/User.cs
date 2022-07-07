@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Xml.Linq;
 using System.Linq;
+using System.Configuration;
 
 namespace SecurityQuestion
 {
@@ -34,16 +35,21 @@ namespace SecurityQuestion
         {
             return _QnAList.GetEnumerator();
         }
+
+        private readonly string  _file = ConfigurationManager.AppSettings["FilePath"] + ConfigurationManager.AppSettings["FileName"];
+
         #endregion properties
 
         #region methods
         //Search for and load the user along with security question/answers provided
-        public bool Load(DataStore ds)
+        public bool Load()
         {
-            if (!ds.Exists())           //Security File doesn't exist yet so nor does user.
+            DataStore _ds = new DataStore(_file);    //Security File
+
+            if (!_ds.Exists())           //Security File doesn't exist yet so nor does user.
                 return false;
             
-            var _secFile = XDocument.Load(ds.FileName);
+            var _secFile = XDocument.Load(_ds.FileName);
 
             var _users = from _user in _secFile.Descendants("User")
                          where _user.Attribute("name").Value == Name
@@ -66,15 +72,17 @@ namespace SecurityQuestion
         }
 
         //Remove user from file
-        public void Delete(DataStore ds)
+        public void Delete()
         {
+            DataStore _ds = new DataStore(_file);    //Security File
             this.ClearQnA();                //Remove QnA
-            ds.DeleteUser(this);
+            _ds.DeleteUser(this);
         }
         //Save user and Question/answers to file
-        public bool SaveQnA(DataStore ds)
+        public bool SaveQnA()
         {
-            ds.CreateSecFile(this);
+            DataStore _ds = new DataStore(_file);    //Security File
+            _ds.CreateSecFile(this);
 
             return true;
         }
